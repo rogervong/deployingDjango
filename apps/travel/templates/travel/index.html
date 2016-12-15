@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Travel Dashboard</title>
+	</head>
+	<body>
+		<div>
+			<h1>Hello, {{request.session.name }}</h1>
+			<a href="{% url 'main' %}">Logout</a>
+		</div>
+		<h3>Your Trip Schedules</h3>
+		<table>
+			<tr>
+				<thead>
+					<th>Destination</th>
+					<th>Travel Start Date</th>
+					<th>Trave End Date</th>
+					<th>Plan</th>
+				</thead>
+			</tr>
+			{% for trav in travel%}
+			<tr>
+				<td><a href="{% url 'destination' id=trav.plan.id %}">{{trav.plan.destination}}</a></td>
+				<td>{{trav.plan.start}}</td>
+				<td>{{trav.plan.end}}</td>
+				<td>{{trav.plan.description}}</td>
+			</tr>
+			{% endfor %}
+		</table>
+		<h3>Other User's Travel Plans</h3>
+		<table>
+			<tr>
+				<thead>
+					<th>Name</th>
+					<th>Destination</th>
+					<th>Travel Start Date</th>
+					<th>Travel End Date</th>
+					<th>Do You Want to Join?</th>
+				</thead>
+			</tr>
+			{% for pa in plan %}
+				{% if pa.user.id != request.session.id %}
+				<tr>
+					<td>{{pa.user.name}}</td>
+					<td><a href="{% url 'destination' id=pa.id %}">{{pa.destination}}</a></td>
+					<td>{{pa.start}}</td>
+					<td>{{pa.end}}</td>
+					<td><a href="{% url 'join' id=pa.id%}">Join</a></td>
+				</tr>
+				{% endif %}
+			{% endfor%}
+		</table>
+		<a href="{% url 'add' %}">Add Travel Plan</a>
+	</body>
+</html>
